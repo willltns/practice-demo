@@ -4,12 +4,7 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 const state = {
-  todoList: [],
-  filters: {
-    all: todoList => todoList,
-    active: todoList => todoList.filter(item => !item.done),
-    completed: todoList => todoList.filter(item => item.done)
-  }
+  todoList: []
 };
 
 const getters = {

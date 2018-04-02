@@ -14,6 +14,12 @@
 <script>
 import Todo from './Todo';
 
+const filters = {
+    all: todoList => todoList,
+    active: todoList => todoList.filter(item => !item.done),
+    completed: todoList => todoList.filter(item => item.done)
+}
+
 export default {
   name: "todo-list",
 
@@ -30,7 +36,7 @@ export default {
       return this.$store.state.todoList;
     },
     filteredTodoList() {
-      return this.$store.state.filters[this.visibility](this.todoList);
+      return filters[this.visibility](this.todoList);
     },
     allChecked() {
       return this.$store.state.todoList.every(item => item.done);
