@@ -13,7 +13,6 @@ const selectVisibleTodos = createSelector(
       case FilterTypes.UNCOMPLETED :
         return todos.filter(todo => !todo.completed);
       case FilterTypes.COMPLETED :
-        alert(JSON.stringify(todos.filter(todo => todo.completed)));
         return todos.filter(todo => todo.completed);
       default :
         throw new Error('unsupported filter types');

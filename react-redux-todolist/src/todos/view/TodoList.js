@@ -1,23 +1,21 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import { selectVisibleTodos} from "../selector";
+import { connect } from 'react-redux';
+import { selectVisibleTodos } from "../selector";
 import PropTypes from 'prop-types';
 
 import TodoItem from './TodoItem';
-import {toggleTodo, removeTodo} from '../actions.js';
 
-function TodoList({todos, onToggleTodo, onRemoveTodo}) {
+function TodoList({ todos }) {
 
     return (
         <ul className="todo-list">
             {
                 todos.map((item) => (
                     <TodoItem
+                        id={item.id}
                         key={item.id}
                         text={item.text}
                         completed={item.completed}
-                        onToggle={() => onToggleTodo(item.id)}
-                        onRemove={() => onRemoveTodo(item.id)}
                     />
                 ))
             }
@@ -26,27 +24,11 @@ function TodoList({todos, onToggleTodo, onRemoveTodo}) {
 }
 
 TodoList.propTypes = {
-    todos: PropTypes.array.isRequired,
-    onToggleTodo: PropTypes.func.isRequired,
-    onRemoveTodo: PropTypes.func.isRequired
+    todos: PropTypes.array.isRequired
 };
 
 const mapStateToProps = (state) => ({
     todos: selectVisibleTodos(state)
 });
 
-const mapDispatchToProps = {
-    onToggleTodo: toggleTodo,
-    onRemoveTodo: removeTodo
-};
-
-/*const mapDispatchToProps = (dispatch) => ({
-    onToggleTodo: (id) => {
-        dispatch(toggleTodo(id));
-    },
-    onRemoveTodo: (id) => {
-        dispatch(removeTodo(id));
-    }
-});*/
-
-export default connect(mapStateToProps, mapDispatchToProps)(TodoList);
+export default connect(mapStateToProps)(TodoList);
