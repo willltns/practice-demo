@@ -1,9 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import { selectVisibleTodos} from "../selector";
+import PropTypes from 'prop-types';
+
 import TodoItem from './TodoItem';
 import {toggleTodo, removeTodo} from '../actions.js';
-import {FilterTypes} from '../../constants.js';
-import PropTypes from 'prop-types';
 
 function TodoList({todos, onToggleTodo, onRemoveTodo}) {
 
@@ -30,24 +31,8 @@ TodoList.propTypes = {
     onRemoveTodo: PropTypes.func.isRequired
 };
 
-const selectVisibleTodos = (todos, filter) => {
-    switch (filter) {
-        case FilterTypes.ALL: {
-            return todos;
-        }
-        case FilterTypes.COMPLETED: {
-            return todos.filter(item => item.completed);
-        }
-        case FilterTypes.UNCOMPLETED: {
-            return todos.filter(item => !item.completed);
-        }
-        default:
-            throw new Error('unsupported filter');
-    }
-};
-
 const mapStateToProps = (state) => ({
-    todos: selectVisibleTodos(state.todos, state.filter)
+    todos: selectVisibleTodos(state)
 });
 
 const mapDispatchToProps = {
