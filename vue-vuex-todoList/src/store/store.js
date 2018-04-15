@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 Vue.use(Vuex);
+let nextId = 1;
 
 const state = {
   todoList: []
@@ -14,6 +15,7 @@ const getters = {
 const mutations = {
   addTodo (state, text) {
     state.todoList.push({
+      id: nextId ++,
       text: text,
       done: false
     });

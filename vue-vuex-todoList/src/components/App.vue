@@ -5,35 +5,39 @@
 
     <todo-add></todo-add>
 
-    <section class="main" v-show="todoList.length">
-      <input class="toggle-all" id="toggle-all"
-        type="checkbox"
-        :checked="allChecked"
-        @change="toggleAll({done: !allChecked})"/>
-      <label for="toggle-all"></label>
-      <ul class="todo-list">
-        <todo v-for="(item, index) in filteredTodoList" :item="item" :key="index"></todo>
-      </ul>
-    </section>
-
-    <footer class="footer" v-show="todoList.length">
-      <span class="todo-count">
-        {{remaining | pluralize(' item')}}
-      </span>
-      <ul class="filters">
-        <li v-for="(val, key) in filters">
-          <a :href="'#/' + key"
-            :class="{selected: visibility === key}"
-            @click="visibility = key">{{key | capitalize}}</a>
-        </li>
-      </ul>
-      <button class="clear-completed"
-        v-show="todoList.some(item => item.done)"
-        @click="clearCompleted">
-        Clear completed
-      </button>
-    </footer>
-
+    <transition name="follow">
+      <section class="status" v-show="todoList.length">
+        <span class="todo-count">
+          {{remaining | pluralize(' item')}}
+        </span>
+        <ul class="filters">
+          <li v-for="(val, key) in filters">
+            <a :href="'#/' + key"
+               :class="{selected: visibility === key}"
+               @click="visibility = key">{{key | capitalize}}</a>
+          </li>
+        </ul>
+        <button class="clear-completed"
+                v-show="todoList.some(item => item.done)"
+                @click="clearCompleted">
+          Clear completed
+        </button>
+      </section>
+    </transition>
+    <transition name="last-del">
+      <section class="main" v-show="todoList.length">
+        <input class="toggle-all" id="toggle-all"
+          type="checkbox"
+          :checked="allChecked"
+          @change="toggleAll({done: !allChecked})"/>
+        <label for="toggle-all"></label>
+        <ul class="todo-list">
+          <transition-group name="fade">
+            <todo class="trans-item" v-for="item in filteredTodoList" :item="item" :key="item.id"></todo>
+          </transition-group>
+        </ul>
+      </section>
+    </transition>
   </section>
 </template>
 
@@ -107,3 +111,51 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+  .trans-item {
+    transition: all .5s;
+  }
+
+  .fade-enter {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .fade-leave-active {
+    position: absolute;
+  }
+
+  .fade-leave-to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  .fade-move:not(.fade-leave-active) {
+    transition: transform .5s;
+  }
+
+  .follow-enter {
+    opacity: 0;
+  }
+
+  .follow-enter-active {
+    transition: all .5s;
+  }
+
+  .follow-enter-to {
+    opacity: 1;
+  }
+
+  .last-del-leave-active,
+  .follow-leave-active {
+    transition: all .5s;
+  }
+
+  .last-del-leave-to,
+  .follow-leave-to {
+    opacity: 0;
+  }
+
+</style>

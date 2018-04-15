@@ -6,7 +6,7 @@
         :checked="item.done"
         @change="toggleTodo(item)"/>
       <label v-text="item.text" @dblclick="editing = true" ></label>
-      <button class="destroy" @click="deleteTodo(item)"></button>
+      <button class="destroy" :class="{disp: !btnDisp}" @click="btnDisp = false; $nextTick( () => deleteTodo(item))"></button>
     </div>
     <input class="edit"
       v-show="editing"
@@ -30,7 +30,8 @@ import { mapActions } from 'vuex'
 
     data () {
       return {
-        editing: false
+        editing: false,
+        btnDisp: true
       }
     },
 
@@ -67,3 +68,10 @@ import { mapActions } from 'vuex'
 
   }
 </script>
+
+<style scoped>
+
+  .disp {
+    display: none !important;
+  }
+</style>
